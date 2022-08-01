@@ -1,5 +1,4 @@
 package com.board.projectboard.domain;
-
 import java.time.LocalDateTime;
 
 import lombok.Getter;
@@ -26,6 +25,7 @@ import java.util.Objects;
 @Entity
 public class ArticleComment extends AuditingFields{
 
+    //aaaaa
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
