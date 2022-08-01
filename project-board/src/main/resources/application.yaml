@@ -24,6 +24,9 @@ spring:
       hibernate.default_batch_fetch_size: 100 #  (N+1)?? ?? ?? // ??? ?? select
   h2.console.enabled: false                   # H2 ? ??
   sql.init.mode: always                       # data.sql ?? ???
+  data.rest:
+    base-path: /api
+    detection-strategy: annotated
   # thymeleaf.cache: false
 
 ---
