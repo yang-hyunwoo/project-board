@@ -4,6 +4,7 @@ import com.board.projectboard.domain.Article;
 import com.board.projectboard.domain.ArticleComment;
 import com.board.projectboard.domain.UserAccount;
 import com.board.projectboard.dto.ArticleCommentDto;
+import com.board.projectboard.dto.UserAccountDto;
 import com.board.projectboard.repository.ArticleCommentRepository;
 import com.board.projectboard.repository.ArticleRepository;
 import com.board.projectboard.repository.UserAccountRepository;
@@ -57,7 +58,7 @@ class ArticleCommentServiceTest {
         // Given
         ArticleCommentDto dto = createArticleCommentDto("댓글");
         given(articleRepository.getReferenceById(dto.articleId())).willReturn(createArticle());
-        given(userAccountRepository.getReferenceById(dto.userAccountDto().userId())).willReturn(createUserAccount());
+        given(userAccountRepository.getReferenceById(Long.parseLong(dto.userAccountDto().userId()))).willReturn(createUserAccount());
         given(articleCommentRepository.save(any(ArticleComment.class))).willReturn(null);
 
         // When
@@ -65,7 +66,7 @@ class ArticleCommentServiceTest {
 
         // Then
         then(articleRepository).should().getReferenceById(dto.articleId());
-        then(userAccountRepository).should().getReferenceById(dto.userAccountDto().userId());
+        then(userAccountRepository).should().getReferenceById(Long.parseLong(dto.userAccountDto().userId()));
         then(articleCommentRepository).should().save(any(ArticleComment.class));
     }
 
@@ -191,5 +192,3 @@ class ArticleCommentServiceTest {
 
 }
 
-
-}
