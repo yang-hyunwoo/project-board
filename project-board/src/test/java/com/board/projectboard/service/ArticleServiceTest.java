@@ -2,7 +2,7 @@ package com.board.projectboard.service;
 
 import com.board.projectboard.domain.Article;
 import com.board.projectboard.domain.UserAccount;
-import com.board.projectboard.domain.type.SearchType;
+import com.board.projectboard.domain.constant.SearchType;
 import com.board.projectboard.dto.ArticleDto;
 import com.board.projectboard.dto.ArticleUpdateDto;
 import com.board.projectboard.dto.ArticleWithCommentsDto;
@@ -100,42 +100,42 @@ class ArticleServiceTest {
         then(articleRepository).should().findByHashtag(hashtag, pageable);
     }
 
-//    @DisplayName("게시글 ID로 조회하면, 댓글 달긴 게시글을 반환한다.")
-//    @Test
-//    void givenArticleId_whenSearchingArticleWithComments_thenReturnsArticleWithComments() {
-//        // Given
-//        Long articleId = 1L;
-//        Article article = createArticle();
-//        given(articleRepository.findById(articleId)).willReturn(Optional.of(article));
-//
-//        // When
-//        ArticleWithCommentsDto dto = sut.getArticleWithComments(articleId);
-//
-//        // Then
-//        assertThat(dto)
-//                .hasFieldOrPropertyWithValue("title", article.getTitle())
-//                .hasFieldOrPropertyWithValue("content", article.getContent())
-//                .hasFieldOrPropertyWithValue("hashtag", article.getHashtag());
-//        then(articleRepository).should().findById(articleId);
-//    }
-//
-//    @DisplayName("댓글 달린 게시글이 없으면, 예외를 던진다.")
-//    @Test
-//    void givenNonexistentArticleId_whenSearchingArticleWithComments_thenThrowsException() {
-//        // Given
-//        Long articleId = 0L;
-//        given(articleRepository.findById(articleId)).willReturn(Optional.empty());
-//
-//        // When
-//        Throwable t = catchThrowable(() -> sut.getArticleWithComments(articleId));
-//
-//        // Then
-//        assertThat(t)
-//                .isInstanceOf(EntityNotFoundException.class)
-//                .hasMessage("게시글이 없습니다 - articleId: " + articleId);
-//        then(articleRepository).should().findById(articleId);
-//    }
-//
+    @DisplayName("게시글 ID로 조회하면, 댓글 달긴 게시글을 반환한다.")
+    @Test
+    void givenArticleId_whenSearchingArticleWithComments_thenReturnsArticleWithComments() {
+        // Given
+        Long articleId = 1L;
+        Article article = createArticle();
+        given(articleRepository.findById(articleId)).willReturn(Optional.of(article));
+
+        // When
+        ArticleWithCommentsDto dto = sut.getArticleWithComments(articleId);
+
+        // Then
+        assertThat(dto)
+                .hasFieldOrPropertyWithValue("title", article.getTitle())
+                .hasFieldOrPropertyWithValue("content", article.getContent())
+                .hasFieldOrPropertyWithValue("hashtag", article.getHashtag());
+        then(articleRepository).should().findById(articleId);
+    }
+
+    @DisplayName("댓글 달린 게시글이 없으면, 예외를 던진다.")
+    @Test
+    void givenNonexistentArticleId_whenSearchingArticleWithComments_thenThrowsException() {
+        // Given
+        Long articleId = 0L;
+        given(articleRepository.findById(articleId)).willReturn(Optional.empty());
+
+        // When
+        Throwable t = catchThrowable(() -> sut.getArticleWithComments(articleId));
+
+        // Then
+        assertThat(t)
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("게시글이 없습니다 - articleId: " + articleId);
+        then(articleRepository).should().findById(articleId);
+    }
+
     @DisplayName("게시글을 조회하면, 게시글을 반환한다.")
     @Test
     void givenArticleId_whenSearchingArticle_thenReturnsArticle() {
@@ -145,7 +145,7 @@ class ArticleServiceTest {
         given(articleRepository.findById(articleId)).willReturn(Optional.of(article));
 
         // When
-        ArticleWithCommentsDto dto = sut.getArticle(articleId);
+        ArticleDto dto = sut.getArticle(articleId);
 
         // Then
         assertThat(dto)
@@ -177,12 +177,14 @@ class ArticleServiceTest {
     void givenArticleInfo_whenSavingArticle_thenSavesArticle() {
         // Given
         ArticleDto dto = createArticleDto();
+        given(userAccountRepository.getReferenceById(dto.userAccountDto().userId())).willReturn(createUserAccount());
         given(articleRepository.save(any(Article.class))).willReturn(createArticle());
 
         // When
-        sut.saveArticle(dto);
+        sut.updateArticle(dto.id(), dto);
 
         // Then
+        then(userAccountRepository).should().getReferenceById(dto.userAccountDto().userId());
         then(articleRepository).should().save(any(Article.class));
     }
 
@@ -195,7 +197,7 @@ class ArticleServiceTest {
         given(articleRepository.getReferenceById(dto.id())).willReturn(article);
 
         // When
-        sut.updateArticle(dto);
+        sut.updateArticle(dto.id(), dto);
 
         // Then
         assertThat(article)
@@ -213,7 +215,7 @@ class ArticleServiceTest {
         given(articleRepository.getReferenceById(dto.id())).willThrow(EntityNotFoundException.class);
 
         // When
-        sut.updateArticle(dto);
+        sut.updateArticle(dto.id(), dto);
 
         // Then
         then(articleRepository).should().getReferenceById(dto.id());
@@ -224,7 +226,7 @@ class ArticleServiceTest {
     void givenArticleId_whenDeletingArticle_thenDeletesArticle() {
         // Given
         Long articleId = 1L;
-        String userId = "uno";
+        String userId = "gusdn";
 //        willDoNothing().given(articleRepository).deleteByIdAndUserAccount_UserId(articleId, userId);
 
         // When
@@ -267,10 +269,10 @@ class ArticleServiceTest {
 
     private UserAccount createUserAccount() {
         return UserAccount.of(
-                "uno",
+                "gusdn",
                 "password",
-                "uno@email.com",
-                "Uno",
+                "gusdn@email.com",
+                "gusdn",
                 null
         );
     }
@@ -299,22 +301,22 @@ class ArticleServiceTest {
                 content,
                 hashtag,
                 LocalDateTime.now(),
-                "Uno",
+                "gusdn",
                 LocalDateTime.now(),
-                "Uno");
+                "gusdn");
     }
 
     private UserAccountDto createUserAccountDto() {
         return UserAccountDto.of(
-                "uno",
+                "gusdn",
                 "password",
-                "uno@mail.com",
-                "Uno",
+                "gusdn@mail.com",
+                "gusdn",
                 "This is memo",
                 LocalDateTime.now(),
-                "uno",
+                "gusdn",
                 LocalDateTime.now(),
-                "uno"
+                "gusdn"
         );
     }
 
