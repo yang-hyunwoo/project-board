@@ -26,15 +26,15 @@ public class AuthControllerTest {
 
 
 
-    @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 정상 호출")
-    @Test
-    public void givenNothing_whenTryingToLogIN_thenReturnsLogInView() throws Exception {
-        // Given
-
-        // When & Then
-        mvc.perform(get("/login"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML));
-
-    }
+//    @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 정상 호출")
+//    @Test
+//    public void givenNothing_whenTryingToLogIN_thenReturnsLogInView() throws Exception {
+//        // Given
+//
+//        // When & Then
+//        mvc.perform(get("/login"))
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML));
+//
+//    }
 }
