@@ -181,7 +181,7 @@ class ArticleServiceTest {
         given(articleRepository.save(any(Article.class))).willReturn(createArticle());
 
         // When
-        sut.updateArticle(dto.id(), dto);
+        sut.saveArticle(dto);
 
         // Then
         then(userAccountRepository).should().getReferenceById(dto.userAccountDto().userId());
@@ -195,6 +195,7 @@ class ArticleServiceTest {
         Article article = createArticle();
         ArticleDto dto = createArticleDto("새 타이틀", "새 내용", "#springboot");
         given(articleRepository.getReferenceById(dto.id())).willReturn(article);
+        given(userAccountRepository.getReferenceById(dto.userAccountDto().userId())).willReturn(dto.userAccountDto().toEntity());
 
         // When
         sut.updateArticle(dto.id(), dto);
@@ -205,6 +206,7 @@ class ArticleServiceTest {
                 .hasFieldOrPropertyWithValue("content", dto.content())
                 .hasFieldOrPropertyWithValue("hashtag", dto.hashtag());
         then(articleRepository).should().getReferenceById(dto.id());
+        then(userAccountRepository).should().getReferenceById(dto.userAccountDto().userId());
     }
 
     @DisplayName("없는 게시글의 수정 정보를 입력하면, 경고 로그를 찍고 아무 것도 하지 않는다.")
@@ -226,31 +228,31 @@ class ArticleServiceTest {
     void givenArticleId_whenDeletingArticle_thenDeletesArticle() {
         // Given
         Long articleId = 1L;
-        String userId = "gusdn";
-//        willDoNothing().given(articleRepository).deleteByIdAndUserAccount_UserId(articleId, userId);
+        String userId = "uno";
+        willDoNothing().given(articleRepository).deleteByIdAndUserAccount_UserId(articleId, userId);
 
         // When
-        sut.deleteArticle(1L);
+        sut.deleteArticle(1L, userId);
 
         // Then
-//        then(articleRepository).should().deleteByIdAndUserAccount_UserId(articleId, userId);
+        then(articleRepository).should().deleteByIdAndUserAccount_UserId(articleId, userId);
     }
-//
-//    @DisplayName("게시글 수를 조회하면, 게시글 수를 반환한다")
-//    @Test
-//    void givenNothing_whenCountingArticles_thenReturnsArticleCount() {
-//        // Given
-//        long expected = 0L;
-//        given(articleRepository.count()).willReturn(expected);
-//
-//        // When
-//        long actual = sut.getArticleCount();
-//
-//        // Then
-//        assertThat(actual).isEqualTo(expected);
-//        then(articleRepository).should().count();
-//    }
-//
+
+    @DisplayName("게시글 수를 조회하면, 게시글 수를 반환한다")
+    @Test
+    void givenNothing_whenCountingArticles_thenReturnsArticleCount() {
+        // Given
+        long expected = 0L;
+        given(articleRepository.count()).willReturn(expected);
+
+        // When
+        long actual = sut.getArticleCount();
+
+        // Then
+        assertThat(actual).isEqualTo(expected);
+        then(articleRepository).should().count();
+    }
+
     @DisplayName("해시태그를 조회하면, 유니크 해시태그 리스트를 반환한다")
     @Test
     void givenNothing_whenCalling_thenReturnsHashtags() {
@@ -269,10 +271,10 @@ class ArticleServiceTest {
 
     private UserAccount createUserAccount() {
         return UserAccount.of(
-                "gusdn",
+                "uno",
                 "password",
-                "gusdn@email.com",
-                "gusdn",
+                "uno@email.com",
+                "Uno",
                 null
         );
     }
@@ -301,22 +303,22 @@ class ArticleServiceTest {
                 content,
                 hashtag,
                 LocalDateTime.now(),
-                "gusdn",
+                "Uno",
                 LocalDateTime.now(),
-                "gusdn");
+                "Uno");
     }
 
     private UserAccountDto createUserAccountDto() {
         return UserAccountDto.of(
-                "gusdn",
+                "uno",
                 "password",
-                "gusdn@mail.com",
-                "gusdn",
+                "uno@mail.com",
+                "Uno",
                 "This is memo",
                 LocalDateTime.now(),
-                "gusdn",
+                "uno",
                 LocalDateTime.now(),
-                "gusdn"
+                "uno"
         );
     }
 
