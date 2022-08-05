@@ -32,6 +32,17 @@ spring:
   # thymeleaf.cache: false
 
 ---
+
+spring:
+  config.activate.on-profile: heroku
+  datasource:
+    url: #{CLEARDB_DATABASE_URL}
+    username:
+    password:
+  jpa.hibernate.ddl-auto: create
+  sql.init.mode: always
+
+
 #??? db ?
 
 #spring:
