@@ -31,7 +31,6 @@ class ArticleCommentServiceTest {
     @InjectMocks private ArticleCommentService sut;
 
     @Mock private ArticleRepository articleRepository;
-
     @Mock private ArticleCommentRepository articleCommentRepository;
     @Mock private UserAccountRepository userAccountRepository;
 
@@ -126,14 +125,14 @@ class ArticleCommentServiceTest {
     void givenArticleCommentId_whenDeletingArticleComment_thenDeletesArticleComment() {
         // Given
         Long articleCommentId = 1L;
-        String userId = "gusdn";
-        willDoNothing().given(articleCommentRepository).deleteById(articleCommentId);
+        String userId = "uno";
+        willDoNothing().given(articleCommentRepository).deleteByIdAndUserAccount_UserId(articleCommentId, userId);
 
         // When
-        sut.deleteArticleComment(articleCommentId);
+        sut.deleteArticleComment(articleCommentId, userId);
 
         // Then
-        then(articleCommentRepository).should().deleteById(articleCommentId);
+        then(articleCommentRepository).should().deleteByIdAndUserAccount_UserId(articleCommentId, userId);
     }
 
 
@@ -144,23 +143,23 @@ class ArticleCommentServiceTest {
                 createUserAccountDto(),
                 content,
                 LocalDateTime.now(),
-                "gusdn",
+                "uno",
                 LocalDateTime.now(),
-                "gusdn"
+                "uno"
         );
     }
 
     private UserAccountDto createUserAccountDto() {
         return UserAccountDto.of(
-                "gusdn",
+                "uno",
                 "password",
-                "gusdn@mail.com",
-                "gusdn",
+                "uno@mail.com",
+                "Uno",
                 "This is memo",
                 LocalDateTime.now(),
-                "gusdn",
+                "uno",
                 LocalDateTime.now(),
-                "gusdn"
+                "uno"
         );
     }
 
@@ -174,10 +173,10 @@ class ArticleCommentServiceTest {
 
     private UserAccount createUserAccount() {
         return UserAccount.of(
-                "gusdn",
+                "uno",
                 "password",
-                "gusdn@email.com",
-                "gusdn",
+                "uno@email.com",
+                "Uno",
                 null
         );
     }
@@ -192,4 +191,3 @@ class ArticleCommentServiceTest {
     }
 
 }
-
