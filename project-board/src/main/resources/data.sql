@@ -1,10 +1,10 @@
 -- 테스트 계정
 -- TODO: 테스트용이지만 비밀번호가 노출된 데이터 세팅. 개선하는 것이 좋을 지 고민해 보자.
 insert into user_account (user_id, user_password, nickname, email, memo, created_at, created_by, modified_at, modified_by) values
-    ('gusdn', 'asdf1234', 'Gusdn', 'gusdn@mail.com', 'I am Gusdn.', now(), 'Gusdn', now(), 'Gusdn')
+    ('gusdn', '{noop}asdf1234', 'gusdn', 'gusdn@mail.com', 'I am Gusdn.', now(), 'Gusdn', now(), 'Gusdn')
 ;
 insert into user_account (user_id, user_password, nickname, email, memo, created_at, created_by, modified_at, modified_by) values
-    ('gusdn2', 'asdf1234', 'Gusdn2', 'gusdn2@mail.com', 'I am Gusdn2.', now(), 'Gusdn2', now(), 'Gusdn2')
+    ('gusdn2', '{noop}asdf1234', 'gusdn2', 'gusdn2@mail.com', 'I am Gusdn2.', now(), 'Gusdn2', now(), 'Gusdn2')
 ;
 insert into article (user_id, title, content, hashtag, created_by, modified_by, created_at, modified_at) values
                                                                                                              ('gusdn2', 'Quisque ut erat.', 'Vestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.
